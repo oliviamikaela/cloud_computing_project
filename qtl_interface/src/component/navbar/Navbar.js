@@ -3,9 +3,9 @@ import DropDown from "../helpers/DropDown";
 
 function Navbar({ setStart, setEnd }) {
   return (
-    <div className="w-3/12 bg-indigo-900 flex flex-col justify-center items-center space-y-10 py-10 ml-5 rounded-md">
+    <div className="h-72 w-3/12 bg-gray-100 flex flex-col justify-center items-center space-y-10 py-10 rounded-md shadow-md">
       <div className=" flex justify-center items-center">
-        <button class="bg-gray-700 hover:bg-indigo-dark text-gray-100 font-bold py-2 px-4 w-full inline-flex items-center">
+        <button class="bg-gray-800 hover:bg-indigo-dark text-gray-100 font-bold py-2 px-4 w-full inline-flex items-center">
           <svg
             fill="#FFF"
             height="18"
@@ -32,10 +32,10 @@ function Navbar({ setStart, setEnd }) {
         </div>
       </div>
       <div className="flex justify-center items-center space-x-5 ">
-        <button className="bg-gray-200 hover:bg-gray-400 text-gray-700 font-bold py-2 md:px-4 px-2 rounded text-lg">
+        <button className="bg-gray-800 hover:bg-gray-900 text-gray-200 font-bold py-2 md:px-4 px-2 rounded text-lg">
           Start
         </button>
-        <button className="bg-gray-200 hover:bg-gray-400 text-gray-700 font-bold py-2 md:px-4 px-2 rounded text-lg">
+        <button className="bg-gray-800 hover:bg-gray-900 text-gray-200 font-bold py-2 md:px-5 px-3 rounded text-lg">
           End
         </button>
       </div>

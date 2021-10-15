@@ -17,7 +17,7 @@ function DropDown() {
         <div>
           <div
             className={`${
-              headValue !== head ? "text-gray-100 " : "text-gray-900"
+              headValue !== head ? "text-gray-900 " : "text-gray-100"
             } block text-xs leading-2 font-light`}
           >
             {head}
@@ -25,8 +25,8 @@ function DropDown() {
           <Menu.Button
             className={`${
               headValue !== head
-                ? "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                : "text-gray-600 bg-gray-100  hover:bg-opacity-70"
+                ? "bg-gray-800 text-gray-200 hover:bg-gray-900"
+                : "text-gray-200 bg-gray-800  hover:bg-gray-900"
             } inline-flex justify-center w-full px-4 py-2 text-sm font-medium  rounded-md  focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
           >
             {headValue}
@@ -56,7 +56,7 @@ function DropDown() {
                           active ||
                           headValue === option ||
                           headValue === "Multi"
-                            ? "bg-indigo-500 text-white"
+                            ? "bg-gray-500 text-white"
                             : "text-gray-900"
                         }  group flex rounded-md items-center w-full px-2 py-2 text-sm`}
                         onClick={() => {
