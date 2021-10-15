@@ -1,3 +1,5 @@
+# Guide: https://training.galaxyproject.org/training-material/topics/admin/tutorials/terraform/tutorial.html#citing-this-tutorial
+
 resource "openstack_compute_keypair_v2" "my-cloud-key" { # Needs to be changed 
   name       = "project_QTL"
   public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDkuTihVgQNCf4rZPECy9KsTkO0DCcgJJUZX1IrYxww4fvaZFrafPd49UDvGlPDGHnvMdKdBXBBxNaU9Hr5jAfAJ209GhUtxaiI/uoEJxTyhYPWJoc+JVVtEZn0ixN5rxSWrz+u0XV/RRXpW1Pud5UVU7ZPJaENSzFCtxePJHNqZcp7lb50mcikI1vbfsa07g/7JG6QD4tzHt8lvnpO3K/liMXfqL5d/v9RB7Oiyyr2/FLjsPrjcW+43VRPvKVK4BhgUfZs/kJBXYIecnhbb2V6MidZEzg192iDGY6cgz8fCs37aYLZG0v6fP0Oxz4hEbxi+EXy534buU615VJiYg25 Generated-by-Nova"
