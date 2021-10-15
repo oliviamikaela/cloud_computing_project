@@ -8,6 +8,7 @@ terraform {
   }
 }
 
+# info here: https://registry.terraform.io/providers/terraform-provider-openstack/openstack/latest/docs#auth_url
 provider "openstack" {
     auth_url = "https://east-1.cloud.snic.se:8004/v1/c32d121b91b648738e64d50490c05505" # Auth_ur was need. Taken from https://east-1.cloud.snic.se/project/api_access/
 }
