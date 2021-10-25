@@ -9,7 +9,7 @@
 
 
 terraform init
-terraform plan
+terraform plan -auto-approve
 # check if input arg is empty  
 if [ -z "$1" ]
   then terraform apply -auto-approve 
