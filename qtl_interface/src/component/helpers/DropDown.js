@@ -4,7 +4,7 @@ import { ChevronDownIcon } from "@heroicons/react/solid";
 
 var head = "Number of workers";
 var options = [1, 2, 3, 4, 5, 6];
-function DropDown() {
+function DropDown({ setWorkerNum }) {
   const [headValue, setHeadValue] = useState(head);
 
   useEffect(() => {
@@ -61,6 +61,7 @@ function DropDown() {
                         }  group flex rounded-md items-center w-full px-2 py-2 text-sm`}
                         onClick={() => {
                           setHeadValue(option);
+                          setWorkerNum(`sh ./run_terraform.sh ${option}`);
                         }}
                       >
                         {option}
