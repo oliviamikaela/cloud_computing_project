@@ -26,14 +26,26 @@ resource "openstack_networking_floatingip_v2" "floatip_3" {
   count = var.num_workers
 }
 
-data "template_file" "user_data" {
-  template = templatefile(
-    "config-ansible_master.yml", 
-    {
-      
-    })
+# data "template_file" "user_data" {
+#   template = templatefile(
+#     "config-ansible_master.yml", 
+#     {
+#       num_workers = ${var.num_workers},
+#       ansible_floating_ip = ${openstack_networking_floatingip_v2.floatip_1.address},
+#       spark_master_private_ip = ${openstack_compute_instance_v2.spark_master.access_ip_v4},
+#       spark_worker_private_ip = ${openstack_compute_instance_v2.worker.0.access_ip_v4} # Needs to be changed so it works for all worker nodes
+#     })
 
-}
+# }
+
+# locals {
+#   vars = {
+#       num_workers = "${var.num_workers}",
+#       ansible_floating_ip = "${openstack_networking_floatingip_v2.floatip_1.address}",
+#       spark_master_private_ip = "${openstack_compute_instance_v2.spark_master.access_ip_v4}",
+#       spark_worker_private_ip = "${openstack_compute_instance_v2.worker.0.access_ip_v4}" # Needs to be changed so it works for all worker nodes
+#     }
+# }
 
 resource "openstack_compute_instance_v2" "ansible_master" {
    name            = "ansible_master-vm"
@@ -44,6 +56,12 @@ resource "openstack_compute_instance_v2" "ansible_master" {
    network {
      name = "UPPMAX 2021/1-5 Internal IPv4 Network"
    }
+   user_data = templatefile("config-ansible_master.yml", {
+      num_workers = var.num_workers,
+      ansible_floating_ip = openstack_networking_floatingip_v2.floatip_1.address,
+      spark_master_private_ip = openstack_compute_instance_v2.spark_master.access_ip_v4,
+      spark_worker_private_ip = openstack_compute_instance_v2.worker.0.access_ip_v4 # Needs to be changed so it works for all worker nodes
+    })
    #user_data = data.template_file.user_data.rendered
 #  #user_data = <<-EOF
   #   #cloud-config
