@@ -9,10 +9,14 @@
 
 
 terraform init
-terraform plan -auto-approve
+
+#terraform apply -auto-approve
+
 # check if input arg is empty  
 if [ -z "$1" ]
-  then terraform apply -auto-approve 
-else 
-  then terraform apply -var="num_workers=$1" -auto-approve
+then 
+  terraform apply -auto-approve 
+else  
+  terraform apply -var="num_workers=$1" -auto-approve
 
+fi
