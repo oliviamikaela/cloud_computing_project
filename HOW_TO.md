@@ -8,5 +8,6 @@ To run.
 node server.js
 ```
 2. Open your web browser and go to link to access the interface  
-
+https://qtl.netlify.app/ 
+3. Choose the number of workers and press start. 
 
