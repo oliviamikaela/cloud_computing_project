@@ -1,5 +1,4 @@
 #cloud-config
-
 write_files:
   - path: /home/ubuntu/spark_deploymen.yml
     content: |
@@ -228,19 +227,57 @@ write_files:
       sparkmaster ansible_connection=ssh ansible_user=ubuntu
 
       [sparkworker]
-      sparkworker[1:${var.num_workers}] ansible_connection=ssh ansible_user=ubuntu # Add variable that specifyen number of workers
-
+      sparkworker[1:${num_workers}] ansible_connection=ssh ansible_user=ubuntu # Add variable that specifyen number of workers
+  - path: /home/ubuntu/hugo-key.pem
+    content: |
+      -----BEGIN RSA PRIVATE KEY-----
+      MIIEpQIBAAKCAQEA25P0Tjhe7iJ/2THxtNe+n1EI5lCaPO520kPmtQmsVZFR59AY
+      YtOPd7TiqOGZCPM6+mH92MSiljneA1jZzI05dW552X+xXta6OEhb3E46UwumiGQm
+      +XlQO3HCIdDl7TLZfDItCHuJ78yi1NG0wA8Q/m2IpK8JuBRJK9QFSE6WpndlpZar
+      hai5ORcmXIzbCTN305FZZASl9Tx3C2DlXuKw84i72dwJuJ5jXNAiGJKUNl4JwUgi
+      OAWBSxPQAntJUKHT+9T41XPnn/DY+m6qfidHNVL/xAobG7wdnjLkDJmWcX937YsA
+      mETWrhTyfBvj9S6ddpe5sOgwyuImMgosIiAUWQIDAQABAoIBAQCxQi2U/7jS8RLY
+      mZMQdKI0JszScPsyeSd+8sXKHDb9FMVUKA+nqDZHYsUfpI9QRFq2SmkMlyDRuYFa
+      nl2k3dUm0bqYNJdRgnLugKt3m8dFxz/3FzLHboGwm1MmzWbwJ36e3jqwgFqINWC2
+      AVyzNvZ3DqGioJNuASJYuV5SUu8XDgkpg2OOztA6OGVO7OUa76VcOb+qjBLnEifF
+      i6uiBzbxPkvVsOHJHWL4Ygi/W3p2uOyI7ggTzlV169DeA6YA8TiLw5Oa23qqzcMK
+      0wx4VBkHbdn5KASxY9dnXfrOdfVGmgDHKD3UXONeTie6DMi5JnnFfi8YRw5ax+Hf
+      onbZOocBAoGBAPGLwJlJ4+prUCv9jTYT3sCX4R/HKbZNsOWRy2DsSdOkaFHcvOLw
+      HXprLxpHzXX5BuFF3ue/8ue6ksx04h2B5sW4jt1dVKpBS7AU0YdahOyr2Zmj/V0v
+      dnUk5pdVtKrmJs56H90ivnUDMHlrq3ve523/Nv0+gi9toATBlJ2QRwtpAoGBAOi3
+      rJuCKVLM7DDAomQ06xzs5e0euCrbK3TenFCisziupctaxI2KE+bV1Ixcr9GXrurs
+      h3JMr635IaDS26VksBzmb8Ws/DWWbKdA9a41XtE0jygso+pddUIR5YEE+AtQH47I
+      mt+AHk0FAxUzX17Q9jMEpCMpfLSuJF533GNcaVNxAoGBALaAfjQTxTYAgSHLwJ8k
+      YkCoQLuO8rBAgTDjeIQx5BIZ/YwkuT7KZ6twQrWbnNzPHGinLyVxPWni6Tm78oCS
+      /rdTm/Ybp3XAQhy3jhyzww1DRvU0F6IJ03ntOKENa6VYoeeOFHcz4i1tDHohZP8B
+      y2Cr3XN4gEqvjKErVku6kENJAoGBALyY3hHJEqQ/3spD01dSa5gthMj+NFLG/Bji
+      r9vJf2VYZJTBIrlyRV61vGNkWjiJrQBGYB6Jd3aOiGpFeCw5xWAmgD67SkpDdhq1
+      0mU0a3swFTSBuPWeeADrcAt3c233qRuWB61Jr0TL4wuzbn7w6hW+lSbJ4H6tAlxs
+      1vbPVayBAoGAAiABOovuoCmkmWDXrDLpVw+XzLay63rMAmY3Rji7KSuhGAShLuER
+      XT34Y8ThYFZHZCinb1G1gw93px+P7AYDhS8ew42pWlGFbTBETOE0gJJfVnMXtBlg
+      Ijn4IPICzyIkEHqjzF7VLIQ1Ca+vXpuB8GhEc8esrxg5h4Qua09C5yk=
+      -----END RSA PRIVATE KEY-----
 runcmd:
- - sudo bash ansible_install.sh
- - cd ~
- - sudo -- sh -c "echo ${openstack_compute_instance_v2.ansible_master.access_ip_v4} ansible-node >> /etc/hosts"
- - sudo -- sh -c "echo ${openstack_compute_instance_v2.spark_master.access_ip_v4} ansible-node >> /etc/hosts"
- - sudo -- sh -c "echo ${openstack_compute_instance_v2.worker.access_ip_v4} ansible-node >> /etc/hosts"  # Needs to be done for all worker nodes as well. Tricky.. (step 3)
- - ssh-keygen –t rsa -f ansible_key -N ''
- - ssh-copy-id -i ansible_key.pub ubuntu@${openstack_compute_instance_v2.spark_master.access_ip_v4} 
- - ssh-copy-id -i ansible_key.pub ubuntu@${openstack_compute_instance_v2.worker.access_ip_v4} # Needs to be done for all spark worker nodes
- - sudo -- sh -c "echo ansible-node ansible_ssh_host=${openstack_compute_instance_v2.ansible_master.access_ip_v4} >> /etc/ansible/hosts"
- - sudo -- sh -c "echo sparkmaster  ansible_ssh_host=${openstack_compute_instance_v2.spark_master.access_ip_v4} >> /etc/ansible/hosts"
- - sudo -- sh -c "echo sparkworker1 ansible_ssh_host=${openstack_compute_instance_v2.worker.access_ip_v4} >> /etc/ansible/hosts" # Needs to be done for every worker node.
- - sudo -- sh -c "cat /home/ubuntu/add_ansible_hosts >> /etc/ansible/hosts"
- - ansible-playbook -b spark_deployment.yaml
+    #- echo "-----BEGIN RSA PRIVATE KEY-----\nMIIEpQIBAAKCAQEA25P0Tjhe7iJ/2THxtNe+n1EI5lCaPO520kPmtQmsVZFR59AY\nYtOPd7TiqOGZCPM6+mH92MSiljneA1jZzI05dW552X+xXta6OEhb3E46UwumiGQm\n+XlQO3HCIdDl7TLZfDItCHuJ78yi1NG0wA8Q/m2IpK8JuBRJK9QFSE6WpndlpZar\nhai5ORcmXIzbCTN305FZZASl9Tx3C2DlXuKw84i72dwJuJ5jXNAiGJKUNl4JwUgi\nOAWBSxPQAntJUKHT+9T41XPnn/DY+m6qfidHNVL/xAobG7wdnjLkDJmWcX937YsA\nmETWrhTyfBvj9S6ddpe5sOgwyuImMgosIiAUWQIDAQABAoIBAQCxQi2U/7jS8RLY\nmZMQdKI0JszScPsyeSd+8sXKHDb9FMVUKA+nqDZHYsUfpI9QRFq2SmkMlyDRuYFa\nnl2k3dUm0bqYNJdRgnLugKt3m8dFxz/3FzLHboGwm1MmzWbwJ36e3jqwgFqINWC2\nAVyzNvZ3DqGioJNuASJYuV5SUu8XDgkpg2OOztA6OGVO7OUa76VcOb+qjBLnEifF\ni6uiBzbxPkvVsOHJHWL4Ygi/W3p2uOyI7ggTzlV169DeA6YA8TiLw5Oa23qqzcMK\n0wx4VBkHbdn5KASxY9dnXfrOdfVGmgDHKD3UXONeTie6DMi5JnnFfi8YRw5ax+Hf\nonbZOocBAoGBAPGLwJlJ4+prUCv9jTYT3sCX4R/HKbZNsOWRy2DsSdOkaFHcvOLw\nHXprLxpHzXX5BuFF3ue/8ue6ksx04h2B5sW4jt1dVKpBS7AU0YdahOyr2Zmj/V0v\ndnUk5pdVtKrmJs56H90ivnUDMHlrq3ve523/Nv0+gi9toATBlJ2QRwtpAoGBAOi3\nrJuCKVLM7DDAomQ06xzs5e0euCrbK3TenFCisziupctaxI2KE+bV1Ixcr9GXrurs\nh3JMr635IaDS26VksBzmb8Ws/DWWbKdA9a41XtE0jygso+pddUIR5YEE+AtQH47I\nmt+AHk0FAxUzX17Q9jMEpCMpfLSuJF533GNcaVNxAoGBALaAfjQTxTYAgSHLwJ8k\nYkCoQLuO8rBAgTDjeIQx5BIZ/YwkuT7KZ6twQrWbnNzPHGinLyVxPWni6Tm78oCS\n/rdTm/Ybp3XAQhy3jhyzww1DRvU0F6IJ03ntOKENa6VYoeeOFHcz4i1tDHohZP8B\ny2Cr3XN4gEqvjKErVku6kENJAoGBALyY3hHJEqQ/3spD01dSa5gthMj+NFLG/Bji\nr9vJf2VYZJTBIrlyRV61vGNkWjiJrQBGYB6Jd3aOiGpFeCw5xWAmgD67SkpDdhq1\n0mU0a3swFTSBuPWeeADrcAt3c233qRuWB61Jr0TL4wuzbn7w6hW+lSbJ4H6tAlxs\n1vbPVayBAoGAAiABOovuoCmkmWDXrDLpVw+XzLay63rMAmY3Rji7KSuhGAShLuER\nXT34Y8ThYFZHZCinb1G1gw93px+P7AYDhS8ew42pWlGFbTBETOE0gJJfVnMXtBlg\nIjn4IPICzyIkEHqjzF7VLIQ1Ca+vXpuB8GhEc8esrxg5h4Qua09C5yk=\n-----END RSA PRIVATE KEY-----" > hugo-key.pem
+  - echo "started rncmd commands" >> output_process.txt # Print 
+  - scp -i hugo-key.pem output_process.txt ubuntu@130.238.28.44:output_process.txt  # Print 
+  - sudo bash ansible_install.sh
+  - cd ~
+  - echo "${ansible_floating_ip} ansible privade ip" >> output_process.txt # Print 
+  - scp -i hugo-key.pem output_process.txt ubuntu@130.238.28.44:output_process.txt  # Print 
+  - sudo -- sh -c "echo ${ansible_floating_ip} ansible-node >> /etc/hosts"
+  - echo "${spark_master_private_ip} spark master privade ip" >> output_process.txt  # Print 
+  - scp -i hugo-key.pem output_process.txt ubuntu@130.238.28.44:output_process.txt  # Print 
+  - sudo -- sh -c "echo ${spark_master_private_ip} ansible-node >> /etc/hosts"
+  - echo "${spark_worker_private_ip} spark worker privade ip" >> output_process.txt # Print 
+  - scp -i hugo-key.pem output_process.txt ubuntu@130.238.28.44:output_process.txt  # Print 
+  - sudo -- sh -c "echo ${spark_worker_private_ip} ansible-node >> /etc/hosts"  # Needs to be done for all worker nodes as well. Tricky.. (step 3)
+  - ssh-keygen –t rsa -f ansible_key -N ''
+  - ssh-copy-id -i ansible_key.pub ubuntu@${spark_master_private_ip} 
+  - ssh-copy-id -i ansible_key.pub ubuntu@${spark_worker_private_ip} # Needs to be done for all spark worker nodes
+  - sudo -- sh -c "echo ansible-node ansible_ssh_host=${ansible_floating_ip} >> /etc/ansible/hosts"
+  - sudo -- sh -c "echo sparkmaster  ansible_ssh_host=${spark_master_private_ip} >> /etc/ansible/hosts"
+  - sudo -- sh -c "echo sparkworker1 ansible_ssh_host=${spark_worker_private_ip} >> /etc/ansible/hosts" # Needs to be done for every worker node.
+  - sudo -- sh -c "cat /home/ubuntu/add_ansible_hosts >> /etc/ansible/hosts"
+  - ansible-playbook -b spark_deployment.yaml > output_QTL.txt # Print 
+  - scp -i hugo-key.pem output_QTL.txt ubuntu@130.238.28.44:output_QTL.txt  # Print 
