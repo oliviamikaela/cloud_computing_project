@@ -1,0 +1,8 @@
+
+[configNode]
+ansible-node ansible_connection=local ansible_user=ubuntu
+
+[sparkmaster]
+sparkmaster ansible_connection=ssh ansible_user=ubuntu
+
+[sparkworker]
