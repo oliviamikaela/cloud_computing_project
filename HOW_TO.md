@@ -11,5 +11,6 @@ node server.js
 2. Open your web browser and go to link to access the interface  
 https://qtl.netlify.app/ 
 3. Choose the number of workers and press start. 
-4. When all the orchestration is done (this will take up to 1h), the disable button on the front end will be activated. By klicking on it you will be redirected to the juyputer login page. Login with the login token shown on the interface. Now it is all set up and you can start working woth your project. 
+4. When all the orchestration is done (this will take up to 1h), the disabled button on the front end will be activated. By klicking on it you will be redirected to the juyputer login page. Login with the login token shown on the interface. Now it is all set up and you can start working with your project. 
+5. Press end in the interface when you are done to destroy the intstances. 
 
