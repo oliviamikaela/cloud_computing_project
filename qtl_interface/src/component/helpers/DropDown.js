@@ -17,7 +17,7 @@ function DropDown({ setWorkerNum }) {
         <div>
           <div
             className={`${
-              headValue !== head ? "text-gray-900 " : "text-gray-100"
+              headValue !== head ? "text-gray-900 " : "text-green-400"
             } block text-xs leading-2 font-light`}
           >
             {head}
@@ -25,9 +25,9 @@ function DropDown({ setWorkerNum }) {
           <Menu.Button
             className={`${
               headValue !== head
-                ? "bg-gray-800 text-gray-200 hover:bg-gray-900"
-                : "text-gray-200 bg-gray-800  hover:bg-gray-900"
-            } inline-flex justify-center w-full px-4 py-2 text-sm font-medium  rounded-md  focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
+                ? "bg-green-700 text-gray-100 hover:bg-gray-900"
+                : "text-gray-100 bg-green-700  hover:bg-green-900"
+            } inline-flex justify-center w-full px-4 py-2 font-bold  rounded-lg  focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
           >
             {headValue}
             <ChevronDownIcon
