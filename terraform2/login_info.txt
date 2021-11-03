@@ -1,0 +1,7 @@
+TASK [jupyter server token] ****************************************************
+    "token.stdout_lines": [
+        "  \"token\": \"e6d8aff7ec50e5b858ff3a20d46f5e5ffb976949b5fcf824\",", 
+        "  \"token\": \"ac76f67abdeae08c3b6066f5406e10385de26439d2b7e0ea\", ", 
+        "  \"token\": \"73fa676fd3fef0e77f023c45ce50e311a73ab6f29eb810ea\", ", 
+        "  \"token\": \"a5a1dddf92a348f2f5330d1b3ca05a877939b699d92ca948\", "
+130.238.28.134
