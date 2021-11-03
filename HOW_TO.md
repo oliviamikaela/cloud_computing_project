@@ -14,3 +14,5 @@ https://qtl.netlify.app/
 4. When all the orchestration is done (this will take up to 1h), the disabled button on the front end will be activated. By clicking on it you will be redirected to the juyputer login page. Login with the login token shown on the interface. Now it is all set up and you can start working with your project. 
 5. Press end in the interface when you are done to destroy the intstances. 
 
+### Horizontally scale
+To horizontally scale the service one can change the number of workers in the interface and press run. 
