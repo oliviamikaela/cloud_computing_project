@@ -1,4 +1,3 @@
-# This was not in the guide. Is needed
 terraform {
   required_providers {
     openstack = {
@@ -7,11 +6,9 @@ terraform {
     }
   }
 }
-#public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDnUaJC9yNb/Whhfj4g7ttPygPOwEEAtNRDSctmT++mptYBNJx30qZG83IAfzhoKjSQMJSUEtDalSYWqVlonJfa9nDmFwvhgxVy2FUrS1KwtZafU69j2kwva/ifHz0EIXePCwrP+sDZyaLLfnsfAabtE1lCesC/0t8PyrfIWi8XLA+BU7O+uFEsqfL1gILv0TQl+iA5kk4b6UdMWJu3wlobkqSX/2/rPuipXiG8Mxum3dMuEL2cYwJxF3KmyK/gc8es3ObPVK4hiAuDpy53a5fi9yIZsneH6W8d4Orkja7Aj06nNtf4r53RfdGVYzTa6Z2q+ofyDCHc3XstLjBQpt/qrswoKZvVB2C7UbazYuZCqhooQaEwpyAxwBUobzz4Sl+Z6Miu8TotGkSqVV+zbVJYPNG2yMHlWO+y9IxCpRVxUy5ZwxzuwTOruVYTmKM++vZRZtcFdj9oGeWQOqM1laU8kKTPi+Z7QOpslpF4K+80WATYh1jKIjDPlYSanyklomHrTSc9C0qshXgbyYySfnNEvvNqPYGDhpVs7B/iWP4N7tOPGVOBx/5dKxHIb+V86PUqxxwf9qeidtAja5iZ6SykLAYKZqOz6Mlihw6NJ36nbSSYug1APAvT7rpNi+hH3fkWUWHPz0pBKo6VQw8a2mDEj+XzHnfOyl03NmAb3aGU2w== ammaraldhahyani@student-215-91.eduroam.uu.se"
 
 resource "openstack_compute_keypair_v2" "test-keypair" {
   name = "keypairQTL"
-  #name = "project_QTL"
   public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDkuTihVgQNCf4rZPECy9KsTkO0DCcgJJUZX1IrYxww4fvaZFrafPd49UDvGlPDGHnvMdKdBXBBxNaU9Hr5jAfAJ209GhUtxaiI/uoEJxTyhYPWJoc+JVVtEZn0ixN5rxSWrz+u0XV/RRXpW1Pud5UVU7ZPJaENSzFCtxePJHNqZcp7lb50mcikI1vbfsa07g/7JG6QD4tzHt8lvnpO3K/liMXfqL5d/v9RB7Oiyyr2/FLjsPrjcW+43VRPvKVK4BhgUfZs/kJBXYIecnhbb2V6MidZEzg192iDGY6cgz8fCs37aYLZG0v6fP0Oxz4hEbxi+EXy534buU615VJiYg25 Generated-by-Nova"
 }
 
@@ -81,7 +78,6 @@ resource "openstack_compute_floatingip_associate_v2" "floatip_3" {
   
 }
 
-#"sudo -- sh -c 'echo ${openstack_networking_floatingip_v2.floatip_3.0.address} sparkworker1 >> /etc/hosts'",  # Needs to be done for all worker nodes as well. Tricky.. (step 3)
       
 resource "null_resource" "provision0" {
 
@@ -94,7 +90,7 @@ resource "null_resource" "provision0" {
   connection {
     type        = "ssh"
     user        = "ubuntu"
-    private_key = "${file("project_QTL.pem")}" #file(var.os_ssh_keypair)
+    private_key = "${file("project_QTL.pem")}" 
     host        = openstack_networking_floatingip_v2.floatip_1.address
   }
   provisioner "file" {
@@ -156,7 +152,7 @@ resource "null_resource" "provision1" {
   connection {
     type        = "ssh"
     user        = "ubuntu"
-    private_key = "${file("project_QTL.pem")}" #file(var.os_ssh_keypair)
+    private_key = "${file("project_QTL.pem")}"
     host        = openstack_networking_floatingip_v2.floatip_1.address
   }
 
@@ -184,14 +180,14 @@ resource "null_resource" "provision2" {
   connection {
     type        = "ssh"
     user        = "ubuntu"
-    private_key = "${file("project_QTL.pem")}" #file(var.os_ssh_keypair)
+    private_key = "${file("project_QTL.pem")}" 
     host        = openstack_networking_floatingip_v2.floatip_1.address
   }
 
   provisioner "remote-exec" {
     inline = [
       "sudo -- sh -c 'cat /home/ubuntu/add_ansible_hosts >> /etc/ansible/hosts'",
-      "sudo -- sh -c 'echo sparkworker[0:$((${var.num_workers}-1))] ansible_connection=ssh ansible_user=ubuntu >> /etc/ansible/hosts'", # Add variable that specifyen number of workers
+      "sudo -- sh -c 'echo sparkworker[0:$((${var.num_workers}-1))] ansible_connection=ssh ansible_user=ubuntu >> /etc/ansible/hosts'", 
       "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -b spark_deployment.yml > output_QTL.txt",
       "grep 'token' output_QTL.txt > login_info.txt",
       "echo ${openstack_networking_floatingip_v2.floatip_2.address} >> login_info.txt"
