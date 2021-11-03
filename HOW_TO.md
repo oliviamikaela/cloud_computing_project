@@ -1,6 +1,7 @@
 Prerequisities 
 1. Clone the git hub repository.
 2. Make sure Terraform is installed.
+3. Source your rc file. 
 
 To run. 
 1. Stand in terrafrom2 folder and run command  
