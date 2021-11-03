@@ -113,10 +113,6 @@ resource "null_resource" "provision0" {
     source = "add_ansible_hosts"
     destination = "add_ansible_hosts"
   }
-  # provisioner "file" {
-  #   source = "../hugo-key.pem"
-  #   destination = "hugo-key.pem"
-  # }
   provisioner "file" {
     source = "project_QTL.pem"
     destination = "project_QTL.pem"
@@ -127,49 +123,23 @@ resource "null_resource" "provision0" {
   }
   provisioner "remote-exec" {
     inline = [
-      #"mv -f hugo-key.pem ~/.ssh/hugo-key.pem",
       "mv -f project_QTL.pem ~/.ssh/project_QTL.pem",
       "echo nu borjas det!",
       "for i in {1..7}; do echo $i; done",
-      #"chmod 400 ~/.ssh/hugo-key.pem",
       "chmod 400 ~/.ssh/project_QTL.pem",
-      #"echo 'started rncmd commands' > output_process.txt", # Print 
-      #"scp -o 'StrictHostKeyChecking=no' -i ~/.ssh/hugo-key.pem output_process.txt ubuntu@130.238.28.44:output_process.txt",  # Print 
       "echo 'Y' | sudo bash ansible_install.sh",
       "cd ~",
       "sudo -- sh -c 'cat /home/ubuntu/etc_hosts > /etc/hosts'",
-      # "echo '${openstack_networking_floatingip_v2.floatip_1.address} ansible privade ip' >> output_process.txt", # Print 
-      # "scp -i ~/.ssh/hugo-key.pem output_process.txt ubuntu@130.238.28.44:output_process.txt",  # Print 
       "sudo -- sh -c 'echo ${openstack_networking_floatingip_v2.floatip_1.address} ansible-node >> /etc/hosts'",
-      # "echo '${openstack_networking_floatingip_v2.floatip_2.address} spark master privade ip' >> output_process.txt",  # Print 
-      # "scp -i ~/.ssh/hugo-key.pem output_process.txt ubuntu@130.238.28.44:output_process.txt",  # Print 
       "sudo -- sh -c 'echo ${openstack_networking_floatingip_v2.floatip_2.address} sparkmaster >> /etc/hosts'",
-      # "echo '${openstack_networking_floatingip_v2.floatip_3.0.address} spark worker privade ip' >> output_process.txt", # Print 
-      # "scp -i ~/.ssh/hugo-key.pem output_process.txt ubuntu@130.238.28.44:output_process.txt",  # Print 
-      #"sudo -- sh -c 'echo ${openstack_networking_floatingip_v2.floatip_3.0.address} sparkworker1 >> /etc/hosts'",  # Needs to be done for all worker nodes as well. Tricky.. (step 3)
-     # "echo 'saving tp host: ${element(openstack_networking_floatingip_v2.floatip_3.*.address, count.index)} ${element(openstack_compute_instance_v2.worker.*.name, count.index)} '",
-     # "sudo -- sh -c 'echo ${element(openstack_networking_floatingip_v2.floatip_3.*.address, count.index)} ${element(openstack_compute_instance_v2.worker.*.name, count.index)} >> /etc/hosts'",  # Needs to be done for all worker nodes as well. Tricky.. (step 3)
       "echo 'n' | ssh-keygen -t rsa -f ~/.ssh/id_rsa -N ''",
-      #"cp ansible_key ~/.ssh/",
       "cp ~/.ssh/authorized_keys authorized_keys",
       "cat ~/.ssh/id_rsa.pub >> authorized_keys",
       "ssh-keygen -R ${openstack_networking_floatingip_v2.floatip_2.address}",
-     # "ssh-keygen -R ${element(openstack_networking_floatingip_v2.floatip_3.*.address, count.index)}",
       "sleep 30",
       "scp -o 'StrictHostKeyChecking=no' -i ~/.ssh/project_QTL.pem authorized_keys ubuntu@${openstack_networking_floatingip_v2.floatip_2.address}:~/.ssh/authorized_keys",
-     # "scp -o 'StrictHostKeyChecking=no' -i ~/.ssh/project_QTL.pem authorized_keys ubuntu@${element(openstack_networking_floatingip_v2.floatip_3.*.address, count.index)}:~/.ssh/authorized_keys", # Needs to be done for all spark worker nodes
-      # "ssh-keygen -R ${openstack_networking_floatingip_v2.floatip_2.address}",
-      # "ssh-keygen -R ${openstack_networking_floatingip_v2.floatip_3.0.address}",
-      # "ssh-copy-id -o 'StrictHostKeyChecking=no' -i ~/.ssh/ansible_key ubuntu@${openstack_compute_instance_v2.spark_master.access_ip_v4}", 
-      # "ssh-copy-id -o 'StrictHostKeyChecking=no' -i ~/.ssh/ansible_key.pub ubuntu@${openstack_compute_instance_v2.worker.0.access_ip_v4}", # Needs to be done for all spark worker nodes
       "sudo -- sh -c 'echo ansible-node ansible_ssh_host=${openstack_networking_floatingip_v2.floatip_1.address} > /etc/ansible/hosts'",
       "sudo -- sh -c 'echo sparkmaster  ansible_ssh_host=${openstack_networking_floatingip_v2.floatip_2.address} >> /etc/ansible/hosts'",
-     # "sudo -- sh -c 'echo ${element(openstack_compute_instance_v2.worker.*.name, count.index)} ansible_ssh_host=${element(openstack_networking_floatingip_v2.floatip_3.*.address, count.index)} >> /etc/ansible/hosts'", # Needs to be done for every worker node.
-     # "sudo -- sh -c 'cat /home/ubuntu/add_ansible_hosts >> /etc/ansible/hosts'",
-      #"sudo -- sh -c 'echo sparkworker1 ansible_connection=ssh ansible_user=ubuntu >> /etc/ansible/hosts'", # Add variable that specifyen number of workers
-     # "sudo -- sh -c 'echo sparkworker[0:${var.num_workers}] ansible_connection=ssh ansible_user=ubuntu >> /etc/ansible/hosts'", # Add variable that specifyen number of workers
-     # "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -b spark_deployment.yml", #> output_QTL.txt", # Print 
-      #"scp -i ~/.ssh/hugo-key.pem output_QTL.txt ubuntu@130.238.28.44:output_QTL.txt",  # Print 
      ]
   }
 }
@@ -192,49 +162,12 @@ resource "null_resource" "provision1" {
 
   provisioner "remote-exec" {
     inline = [
-      # #"mv -f hugo-key.pem ~/.ssh/hugo-key.pem",
-      # "mv -f project_QTL.pem ~/.ssh/project_QTL.pem",
-      # "echo nu borjas det!",
-      # "for i in {1..7}; do echo $i; done",
-      # #"chmod 400 ~/.ssh/hugo-key.pem",
-      # "chmod 400 ~/.ssh/project_QTL.pem",
-      # #"echo 'started rncmd commands' > output_process.txt", # Print 
-      # #"scp -o 'StrictHostKeyChecking=no' -i ~/.ssh/hugo-key.pem output_process.txt ubuntu@130.238.28.44:output_process.txt",  # Print 
-      # "echo 'Y' | sudo bash ansible_install.sh",
-      # "cd ~",
-      # "sudo -- sh -c 'cat /home/ubuntu/etc_hosts > /etc/hosts'",
-      # # "echo '${openstack_networking_floatingip_v2.floatip_1.address} ansible privade ip' >> output_process.txt", # Print 
-      # # "scp -i ~/.ssh/hugo-key.pem output_process.txt ubuntu@130.238.28.44:output_process.txt",  # Print 
-      # "sudo -- sh -c 'echo ${openstack_networking_floatingip_v2.floatip_1.address} ansible-node >> /etc/hosts'",
-      # # "echo '${openstack_networking_floatingip_v2.floatip_2.address} spark master privade ip' >> output_process.txt",  # Print 
-      # # "scp -i ~/.ssh/hugo-key.pem output_process.txt ubuntu@130.238.28.44:output_process.txt",  # Print 
-      # "sudo -- sh -c 'echo ${openstack_networking_floatingip_v2.floatip_2.address} sparkmaster >> /etc/hosts'",
-      # # "echo '${openstack_networking_floatingip_v2.floatip_3.0.address} spark worker privade ip' >> output_process.txt", # Print 
-      # # "scp -i ~/.ssh/hugo-key.pem output_process.txt ubuntu@130.238.28.44:output_process.txt",  # Print 
-      # #"sudo -- sh -c 'echo ${openstack_networking_floatingip_v2.floatip_3.0.address} sparkworker1 >> /etc/hosts'",  # Needs to be done for all worker nodes as well. Tricky.. (step 3)
-      "echo 'saving tp host: ${element(openstack_networking_floatingip_v2.floatip_3.*.address, count.index)} ${element(openstack_compute_instance_v2.worker.*.name, count.index)} '",
-      "sudo -- sh -c 'echo ${element(openstack_networking_floatingip_v2.floatip_3.*.address, count.index)} ${element(openstack_compute_instance_v2.worker.*.name, count.index)} >> /etc/hosts'",  # Needs to be done for all worker nodes as well. Tricky.. (step 3)
-      # "echo 'n' | ssh-keygen -t rsa -f ~/.ssh/id_rsa -N ''",
-      # #"cp ansible_key ~/.ssh/",
-      # "cp ~/.ssh/authorized_keys authorized_keys",
-      # "cat ~/.ssh/id_rsa.pub >> authorized_keys",
-      # "ssh-keygen -R ${openstack_networking_floatingip_v2.floatip_2.address}",
+      "echo 'saving to host: ${element(openstack_networking_floatingip_v2.floatip_3.*.address, count.index)} ${element(openstack_compute_instance_v2.worker.*.name, count.index)} '",
+      "sudo -- sh -c 'echo ${element(openstack_networking_floatingip_v2.floatip_3.*.address, count.index)} ${element(openstack_compute_instance_v2.worker.*.name, count.index)} >> /etc/hosts'",  
       "ssh-keygen -R ${element(openstack_networking_floatingip_v2.floatip_3.*.address, count.index)}",
       "sleep 30",
-     # "scp -o 'StrictHostKeyChecking=no' -i ~/.ssh/project_QTL.pem authorized_keys ubuntu@${openstack_networking_floatingip_v2.floatip_2.address}:~/.ssh/authorized_keys",
-      "scp -o 'StrictHostKeyChecking=no' -i ~/.ssh/project_QTL.pem authorized_keys ubuntu@${element(openstack_networking_floatingip_v2.floatip_3.*.address, count.index)}:~/.ssh/authorized_keys", # Needs to be done for all spark worker nodes
-      # "ssh-keygen -R ${openstack_networking_floatingip_v2.floatip_2.address}",
-      # "ssh-keygen -R ${openstack_networking_floatingip_v2.floatip_3.0.address}",
-      # "ssh-copy-id -o 'StrictHostKeyChecking=no' -i ~/.ssh/ansible_key ubuntu@${openstack_compute_instance_v2.spark_master.access_ip_v4}", 
-      # "ssh-copy-id -o 'StrictHostKeyChecking=no' -i ~/.ssh/ansible_key.pub ubuntu@${openstack_compute_instance_v2.worker.0.access_ip_v4}", # Needs to be done for all spark worker nodes
-      # "sudo -- sh -c 'echo ansible-node ansible_ssh_host=${openstack_networking_floatingip_v2.floatip_1.address} > /etc/ansible/hosts'",
-      # "sudo -- sh -c 'echo sparkmaster  ansible_ssh_host=${openstack_networking_floatingip_v2.floatip_2.address} >> /etc/ansible/hosts'",
-      "sudo -- sh -c 'echo ${element(openstack_compute_instance_v2.worker.*.name, count.index)} ansible_ssh_host=${element(openstack_networking_floatingip_v2.floatip_3.*.address, count.index)} >> /etc/ansible/hosts'", # Needs to be done for every worker node.
-     # "sudo -- sh -c 'cat /home/ubuntu/add_ansible_hosts >> /etc/ansible/hosts'",
-      #"sudo -- sh -c 'echo sparkworker1 ansible_connection=ssh ansible_user=ubuntu >> /etc/ansible/hosts'", # Add variable that specifyen number of workers
-     # "sudo -- sh -c 'echo sparkworker[0:${var.num_workers}] ansible_connection=ssh ansible_user=ubuntu >> /etc/ansible/hosts'", # Add variable that specifyen number of workers
-     # "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -b spark_deployment.yml", #> output_QTL.txt", # Print 
-      #"scp -i ~/.ssh/hugo-key.pem output_QTL.txt ubuntu@130.238.28.44:output_QTL.txt",  # Print 
+      "scp -o 'StrictHostKeyChecking=no' -i ~/.ssh/project_QTL.pem authorized_keys ubuntu@${element(openstack_networking_floatingip_v2.floatip_3.*.address, count.index)}:~/.ssh/authorized_keys", 
+      "sudo -- sh -c 'echo ${element(openstack_compute_instance_v2.worker.*.name, count.index)} ansible_ssh_host=${element(openstack_networking_floatingip_v2.floatip_3.*.address, count.index)} >> /etc/ansible/hosts'", 
      ]
   }
 }
@@ -257,51 +190,11 @@ resource "null_resource" "provision2" {
 
   provisioner "remote-exec" {
     inline = [
-      # #"mv -f hugo-key.pem ~/.ssh/hugo-key.pem",
-      # "mv -f project_QTL.pem ~/.ssh/project_QTL.pem",
-      # "echo nu borjas det!",
-      # "for i in {1..7}; do echo $i; done",
-      # #"chmod 400 ~/.ssh/hugo-key.pem",
-      # "chmod 400 ~/.ssh/project_QTL.pem",
-      # #"echo 'started rncmd commands' > output_process.txt", # Print 
-      # #"scp -o 'StrictHostKeyChecking=no' -i ~/.ssh/hugo-key.pem output_process.txt ubuntu@130.238.28.44:output_process.txt",  # Print 
-      # "echo 'Y' | sudo bash ansible_install.sh",
-      # "cd ~",
-      # "sudo -- sh -c 'cat /home/ubuntu/etc_hosts > /etc/hosts'",
-      # # "echo '${openstack_networking_floatingip_v2.floatip_1.address} ansible privade ip' >> output_process.txt", # Print 
-      # # "scp -i ~/.ssh/hugo-key.pem output_process.txt ubuntu@130.238.28.44:output_process.txt",  # Print 
-      # "sudo -- sh -c 'echo ${openstack_networking_floatingip_v2.floatip_1.address} ansible-node >> /etc/hosts'",
-      # # "echo '${openstack_networking_floatingip_v2.floatip_2.address} spark master privade ip' >> output_process.txt",  # Print 
-      # # "scp -i ~/.ssh/hugo-key.pem output_process.txt ubuntu@130.238.28.44:output_process.txt",  # Print 
-      # "sudo -- sh -c 'echo ${openstack_networking_floatingip_v2.floatip_2.address} sparkmaster >> /etc/hosts'",
-      # # "echo '${openstack_networking_floatingip_v2.floatip_3.0.address} spark worker privade ip' >> output_process.txt", # Print 
-      # # "scp -i ~/.ssh/hugo-key.pem output_process.txt ubuntu@130.238.28.44:output_process.txt",  # Print 
-      # #"sudo -- sh -c 'echo ${openstack_networking_floatingip_v2.floatip_3.0.address} sparkworker1 >> /etc/hosts'",  # Needs to be done for all worker nodes as well. Tricky.. (step 3)
-      # "echo 'saving tp host: ${element(openstack_networking_floatingip_v2.floatip_3.*.address, count.index)} ${element(openstack_compute_instance_v2.worker.*.name, count.index)} '",
-      # "sudo -- sh -c 'echo ${element(openstack_networking_floatingip_v2.floatip_3.*.address, count.index)} ${element(openstack_compute_instance_v2.worker.*.name, count.index)} >> /etc/hosts'",  # Needs to be done for all worker nodes as well. Tricky.. (step 3)
-      # "echo 'n' | ssh-keygen -t rsa -f ~/.ssh/id_rsa -N ''",
-      # #"cp ansible_key ~/.ssh/",
-      # "cp ~/.ssh/authorized_keys authorized_keys",
-      # "cat ~/.ssh/id_rsa.pub >> authorized_keys",
-      # "ssh-keygen -R ${openstack_networking_floatingip_v2.floatip_2.address}",
-      # "ssh-keygen -R ${element(openstack_networking_floatingip_v2.floatip_3.*.address, count.index)}",
-      # "sleep 30",
-      # "scp -o 'StrictHostKeyChecking=no' -i ~/.ssh/project_QTL.pem authorized_keys ubuntu@${openstack_networking_floatingip_v2.floatip_2.address}:~/.ssh/authorized_keys",
-      # "scp -o 'StrictHostKeyChecking=no' -i ~/.ssh/project_QTL.pem authorized_keys ubuntu@${element(openstack_networking_floatingip_v2.floatip_3.*.address, count.index)}:~/.ssh/authorized_keys", # Needs to be done for all spark worker nodes
-      # # "ssh-keygen -R ${openstack_networking_floatingip_v2.floatip_2.address}",
-      # # "ssh-keygen -R ${openstack_networking_floatingip_v2.floatip_3.0.address}",
-      # # "ssh-copy-id -o 'StrictHostKeyChecking=no' -i ~/.ssh/ansible_key ubuntu@${openstack_compute_instance_v2.spark_master.access_ip_v4}", 
-      # # "ssh-copy-id -o 'StrictHostKeyChecking=no' -i ~/.ssh/ansible_key.pub ubuntu@${openstack_compute_instance_v2.worker.0.access_ip_v4}", # Needs to be done for all spark worker nodes
-      # "sudo -- sh -c 'echo ansible-node ansible_ssh_host=${openstack_networking_floatingip_v2.floatip_1.address} > /etc/ansible/hosts'",
-      # "sudo -- sh -c 'echo sparkmaster  ansible_ssh_host=${openstack_networking_floatingip_v2.floatip_2.address} >> /etc/ansible/hosts'",
-      # "sudo -- sh -c 'echo ${element(openstack_compute_instance_v2.worker.*.name, count.index)} ansible_ssh_host=${element(openstack_networking_floatingip_v2.floatip_3.*.address, count.index)} >> /etc/ansible/hosts'", # Needs to be done for every worker node.
       "sudo -- sh -c 'cat /home/ubuntu/add_ansible_hosts >> /etc/ansible/hosts'",
-      #"sudo -- sh -c 'echo sparkworker1 ansible_connection=ssh ansible_user=ubuntu >> /etc/ansible/hosts'", # Add variable that specifyen number of workers
       "sudo -- sh -c 'echo sparkworker[0:$((${var.num_workers}-1))] ansible_connection=ssh ansible_user=ubuntu >> /etc/ansible/hosts'", # Add variable that specifyen number of workers
-      "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -b spark_deployment.yml > output_QTL.txt", # Print  
+      "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -b spark_deployment.yml > output_QTL.txt",
       "grep 'token' output_QTL.txt > login_info.txt",
       "echo ${openstack_networking_floatingip_v2.floatip_2.address} >> login_info.txt"
-      #"scp -i ~/.ssh/hugo-key.pem output_QTL.txt ubuntu@130.238.28.44:output_QTL.txt",  # Print 
      ]
   }
 
