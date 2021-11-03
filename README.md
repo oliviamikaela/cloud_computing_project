@@ -15,4 +15,4 @@ https://qtl.netlify.app/
 5. Press end in the interface when you are done to destroy the intstances. 
 
 ### Horizontally scale
-To horizontally scale the service one can change the number of workers in the interface and press run. 
+To horizontally scale the service one can change the number of workers in the interface and press start. 
