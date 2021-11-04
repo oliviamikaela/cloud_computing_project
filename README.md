@@ -16,3 +16,6 @@ https://qtl.netlify.app/
 
 ### Horizontally scale
 To horizontally scale the service one can change the number of workers in the interface and press start. 
+
+### Interface clarification
+
